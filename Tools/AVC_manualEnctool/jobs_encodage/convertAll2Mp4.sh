@@ -8,9 +8,11 @@
 
 WIDTH=1280
 HEIGHT=720
-VPRE="-vpre medium"
+# ubuntu VPRE="-vpre medium"
+VPRE="-preset medium"
 ASPECT="-aspect 16:9"
-AUDIO="-acodec libvo_aacenc"
+# ubuntu AUDIO="-acodec libvo_aacenc"
+AUDIO="-acodec aac -strict -2"
 SUFFNAME=""
 
 #for ipod
@@ -18,7 +20,8 @@ if [ $5 == 'true' ]
 then 
 	WIDTH=640
 	HEIGHT=480
-	VPRE="-vpre medium -vpre ipod640"
+	# ubuntu VPRE="-vpre medium -vpre ipod640"
+	VPRE="-preset medium -profile:v baseline -level 3.0 -maxrate 10000000 -bufsize 10000000"
 	ASPECT="-aspect 4:3"
 	SUFFNAME="_ipod"
 fi
@@ -39,7 +42,8 @@ then
 fi
 
 #Creation du fichier HD mp4
-/usr/bin/ffmpeg -v -1 -i "$2" $AUDIO -r 25 -vcodec libx264 -s "$L"x"$H" -vf "pad=$WIDTH:$HEIGHT:$PL:$PHB:black" $ASPECT $VPRE -crf 27 -g 100 -threads 0 -y $3_tmp.mp4 &> /dev/null
+# ubuntu /usr/bin/ffmpeg -v -1 -i "$2" $AUDIO -r 25 -vcodec libx264 -s "$L"x"$H" -vf "pad=$WIDTH:$HEIGHT:$PL:$PHB:black" $ASPECT $VPRE -crf 27 -g 100 -threads 0 -y $3_tmp.mp4 &> /dev/null
+/usr/bin/ffmpeg -v -1 -i "$2" $AUDIO -r 25 -vcodec libx264 -vf scale="$L":"$H",pad="$WIDTH:$HEIGHT:$PL:$PHB:black" $ASPECT $VPRE -crf 27 -g 100 -threads 0 -y $3_tmp.mp4 &> /dev/null
 /usr/bin/qt-faststart $3_tmp.mp4 "$3""$SUFFNAME".mp4 &> /dev/null
 
 

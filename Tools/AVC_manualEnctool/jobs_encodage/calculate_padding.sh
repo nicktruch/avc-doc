@@ -14,8 +14,12 @@ DesiH=$4
 
 cd $1
 # Padding calculation
-vidw=`ffmpeg -i "$2" 2>&1 | grep "Video:"  | cut -d',' -f3 | cut -d' ' -f2 | cut -d'x' -f1`
-vidh=`ffmpeg -i "$2" 2>&1 | grep "Video:"  | cut -d',' -f3 | cut -d' ' -f2 | cut -d'x' -f2`
+# vidw=`ffmpeg -i "$2" 2>&1 | grep "Video:"  | cut -d',' -f3 | cut -d' ' -f2 | cut -d'x' -f1`
+# vidh=`ffmpeg -i "$2" 2>&1 | grep "Video:"  | cut -d',' -f3 | cut -d' ' -f2 | cut -d'x' -f2`
+eval $(ffprobe -v error -of flat=s=_ -select_streams v:0 -show_entries stream=height,width ${2})
+vidw=$streams_stream_0_width
+vidh=$streams_stream_0_height
+
 HAUTEUR=$vidh
 LARGEUR=$vidw
 
